@@ -55,7 +55,7 @@ TextAdventureApplication::TextAdventureApplication(const int mapWidth, const int
 TextAdventureApplication::~TextAdventureApplication()
 {
 	//Deallocate the rooms
-	//THIS DOES NOT WORK, FIX IT LATER
+	//THIS DOES NOT WORK, FIX IT LATER (memory leak, oh well)
 	/*
 	for (int i = 0; i < m_mapWidth * m_mapHeight; i++)
 	{
@@ -133,6 +133,8 @@ int TextAdventureApplication::Run()
 		{
 			continue;
 		}
+
+		EnterRoom(m_player->xPosition, m_player->yPosition);
 	}
 
 	return EXIT_SUCCESS;
@@ -181,7 +183,7 @@ void TextAdventureApplication::PrintMinimap() //Make this use VT100 so it is bet
 				PRINT("[ ]");
 			}
 		}
-
+		
 		//Compass row
 		int compassRow = m_mapHeight - y;
 		if (compassRow == 1)
@@ -203,4 +205,3 @@ void TextAdventureApplication::PrintMinimap() //Make this use VT100 so it is bet
 
 	PRINT("\n");
 }
-

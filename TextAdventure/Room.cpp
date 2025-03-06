@@ -1,11 +1,14 @@
 #include "Room.h"
 
+#include <ctime>
+#include <cstdlib>
+
 
 const int ROOM_DESCRIPTION_COUNT = 5;
 const string ROOM_DESCRIPTIONS[ROOM_DESCRIPTION_COUNT] = {
 	"It smells mouldy, the air is moist.",
 	"It is dull, the brown carpet floor is stained.",
-	"Mice scurry away through a hole in the wall. It you can feel the dust as you breathe...",
+	"Mice scurry away through a hole in the wall. You can feel the dust in your nose...",
 	"The walls are bleached yellow, a mysterious buzz fills the air...",
 	"The room is hot, it smells like dead mice."
 };
@@ -38,6 +41,9 @@ Room::~Room()
 //This function generates a room description, as a string
 string GenerateRoomDescription()
 {
+	//Set the random seed
+	srand(rand() + time(nullptr));
+
 	//Pick a random description
 	int index = rand() % (ROOM_DESCRIPTION_COUNT - 1);
 
