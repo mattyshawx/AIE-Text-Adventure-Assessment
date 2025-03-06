@@ -4,7 +4,7 @@
 
 
 //Room class
-class Room : TextAdventureBase
+class Room : public TextAdventureBase
 {
 	//Constructor and destructor
 public:
@@ -12,6 +12,8 @@ public:
 	Room();
 	Room(string description);
 	~Room();
+
+	
 
 };
 

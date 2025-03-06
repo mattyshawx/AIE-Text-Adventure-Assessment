@@ -22,12 +22,11 @@ public:
 	//Private functions
 private:
 
-	void EnterRoom(Room* room);
+	void EnterRoom(int xPosition, int yPosition);
 
-	int GetRoomIndex(int xPosition, int yPosition)
-	{
-		return xPosition + yPosition * m_mapWidth;
-	}
+	int GetRoomIndex(int xPosition, int yPosition);
+
+	void PrintMinimap();
 
 	//Private variables
 private:
