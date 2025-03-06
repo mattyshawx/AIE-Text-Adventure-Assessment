@@ -103,7 +103,36 @@ int TextAdventureApplication::Run()
 		PRINT("\nYou can:\n Move North, East, South or West\n");
 		INPUT(input);
 
-		
+		//Temporary input movement interpretation
+		int xDirection = 0;
+		int yDirection = 0;
+
+		if (input == "move north")
+		{
+			yDirection = 1;
+		}
+		else if (input == "move east")
+		{
+			xDirection = 1;
+		}
+		else if (input == "move south")
+		{
+			yDirection = -1;
+		}
+		else if (input == "move west")
+		{
+			xDirection = -1;
+		}
+		else //No valid input, ask again
+		{
+			continue;
+		}
+
+		//Try and move
+		if (not m_player->Move(xDirection, yDirection))
+		{
+			continue;
+		}
 	}
 
 	return EXIT_SUCCESS;
@@ -132,15 +161,15 @@ int TextAdventureApplication::GetRoomIndex(int xPosition, int yPosition)
 }
 
 //Prints out a minimap showing the grid of rooms, and where the player is
-void TextAdventureApplication::PrintMinimap()
+void TextAdventureApplication::PrintMinimap() //Make this use VT100 so it is better
 {
 	//Title
 	PRINT("MINIMAP:\n");
 
-	//Go through all rooms, these loops are inverted, so room 0, 0 appears in the bottom right corner, to align with the compass directions
+	//Go through all rooms, the y loop if inverted, so room 0, 0 appears in the bottom left corner, to align with the compass directions
 	for (int y = m_mapHeight - 1; y >= 0 ; y--) 
 	{
-		for (int x = m_mapWidth - 1; x >= 0 ; x--)
+		for (int x = 0; x < m_mapWidth; x++)
 		{
 			//See if this is the player's position
 			if (x == m_player->xPosition && y == m_player->yPosition)
@@ -153,9 +182,25 @@ void TextAdventureApplication::PrintMinimap()
 			}
 		}
 
+		//Compass row
+		int compassRow = m_mapHeight - y;
+		if (compassRow == 1)
+		{
+			PRINT("\t  N");
+		}
+		else if (compassRow == 2)
+		{
+			PRINT("\tW + E");
+		}
+		else if (compassRow == 3)
+		{
+			PRINT("\t  S");
+		}
+
 		//Next row
 		PRINT("\n");
 	}
 
 	PRINT("\n");
 }
+

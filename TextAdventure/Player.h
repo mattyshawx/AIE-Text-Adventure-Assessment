@@ -18,23 +18,7 @@ public:
 	//Public functions
 public:
 
-	bool MovePlayer(int xDirection, int yDirection)
-	{
-		//Make sure the player can move in this direction
-		int newXPosition = xPosition + xDirection;
-		int newYPosition = yPosition + yDirection;
-
-		if (newXPosition < 0 || newXPosition >= m_mapWidth || newYPosition < 0 || newYPosition >= m_mapWidth)
-		{
-			return false; //Tried to move out of bounds, do not allow it
-		}
-
-		//Apply the new position
-		xPosition = newXPosition;
-		yPosition = newYPosition;
-
-		return true;
-	}
+	bool Move(int xDirection, int yDirection);
 
 	//Public variables
 public:
