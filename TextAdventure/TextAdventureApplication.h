@@ -1,8 +1,12 @@
 #pragma once
 
+#include <vector>
 
 #include "Player.h"
 #include "Room.h"
+
+
+using std::vector;
 
 
 class TextAdventureApplication
@@ -24,8 +28,6 @@ private:
 
 	void EnterRoom(int xPosition, int yPosition);
 
-	int GetRoomIndex(int xPosition, int yPosition);
-
 	void PrintMinimap();
 
 	//Private variables
@@ -34,7 +36,7 @@ private:
 	//Game objects
 	Player* m_player;
 	
-	Room* m_rooms;
+	vector<vector<Room>> m_rooms;
 
 	Room* m_currentRoom;
 

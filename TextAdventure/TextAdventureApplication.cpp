@@ -34,15 +34,24 @@ TextAdventureApplication::TextAdventureApplication(const int mapWidth, const int
 	//Set the map size
 	m_mapWidth = mapWidth;
 	m_mapHeight = mapHeight;
-	 
+
 	//Fill out the grid of rooms
-	m_rooms = new Room[mapWidth * mapHeight];
+	m_rooms.reserve(m_mapHeight); //Reserve space for the amount of rows
 
 	for (int y = 0; y < m_mapHeight; y++)
 	{
+		m_rooms.emplace_back();
+
+		//Reserve space on this row
+		m_rooms[y].reserve(mapWidth);
+		
+		//Fill out all of the rooms on this row
 		for (int x = 0; x < m_mapWidth; x++)
 		{
-			m_rooms[GetRoomIndex(x, y)] = *new Room(
+			m_rooms[y].emplace_back();
+
+			//Create a new room to put in the array
+			m_rooms[y][x] = Room(
 				GenerateRoomDescription()
 			);
 		}
@@ -54,16 +63,7 @@ TextAdventureApplication::TextAdventureApplication(const int mapWidth, const int
 
 TextAdventureApplication::~TextAdventureApplication()
 {
-	//Deallocate the rooms
-	//THIS DOES NOT WORK, FIX IT LATER (memory leak, oh well)
-	/*
-	for (int i = 0; i < m_mapWidth * m_mapHeight; i++)
-	{
-		delete m_rooms[i];
-	}
-	
-	delete[] m_rooms;
-	*/
+
 
 	//Deallocate the player
 	delete m_player;
@@ -125,7 +125,7 @@ int TextAdventureApplication::Run()
 		}
 		else //No valid input, ask again
 		{
-			continue;
+			break;
 		}
 
 		//Try and move
@@ -149,17 +149,11 @@ int TextAdventureApplication::Run()
 void TextAdventureApplication::EnterRoom(int xPosition, int yPosition)
 {
 	//Set the current room
-	m_currentRoom = &m_rooms[GetRoomIndex(xPosition, yPosition)];
+	m_currentRoom = &m_rooms[yPosition][xPosition];
 
 	//Move the player
 	m_player->xPosition = xPosition;
 	m_player->yPosition = yPosition;
-}
-
-//This takes an X and Y, and converts it into a single index for a 1D array
-int TextAdventureApplication::GetRoomIndex(int xPosition, int yPosition)
-{
-	return xPosition + yPosition * m_mapWidth;
 }
 
 //Prints out a minimap showing the grid of rooms, and where the player is

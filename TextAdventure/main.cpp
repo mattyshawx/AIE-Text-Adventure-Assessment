@@ -12,7 +12,7 @@ int main()
 {
     #if _DEBUG //Catch those pesky bugguses
         _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-       // _CrtSetBreakAlloc(75325236); //Don't forget to comment this out when not using it mate
+        //_CrtSetBreakAlloc(315); //Don't forget to comment this out when not using it mate
     #endif
 
     //Initialise the text aventure application
