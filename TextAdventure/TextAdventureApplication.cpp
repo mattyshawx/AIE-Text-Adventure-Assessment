@@ -4,18 +4,7 @@
 #include <iostream>
 #include <string>
 
-
-#define PRINT(text) cout << text
-#define CLEAR system("cls")
-
-#define INPUT(inputString) \
-	cout << "\n > "; \
-	string inputString; \
-	std::getline(cin, inputString)
-
-#define PRESS_ENTER { \
-	INPUT(temporaryString); \
-}
+#include "ConsoleTools.h"
 
 
 using std::cin;
@@ -56,6 +45,9 @@ TextAdventureApplication::TextAdventureApplication(const int mapWidth, const int
 			);
 		}
 	}
+
+	//Null pointerise the curent room
+	m_currentRoom = nullptr;
 	
 	//Create the player
 	m_player = new Player(0, 0, m_mapWidth, m_mapHeight);
@@ -71,16 +63,16 @@ TextAdventureApplication::~TextAdventureApplication()
 
 
 //------------------------------------------------------------------------
-//					Public functions
+//					Public functions (game loop)
 //------------------------------------------------------------------------
 
 //This introduces the player, and contains the game loop
 int TextAdventureApplication::Run()
 {
 	//Starting message
-	PRINT("Welcome to the text adventure...\n\n An open door to a room is in front of you. Press [enter] to start your adventure.");
+	Print("Welcome to the text adventure...\n\n An open door to a room is in front of you. Press [enter] to start your adventure.");
 
-	PRESS_ENTER;
+	WaitForEnter();
 
 	//Go to the starting room
 	EnterRoom(0, 0);
@@ -89,41 +81,43 @@ int TextAdventureApplication::Run()
 	while (true)
 	{
 		//Clear the output
-		CLEAR;
+		Clear();
 
 		//Print the minimap
 		PrintMinimap();
 
-		PRINT("You are in a room...\n\n");
+		Print("You are in a room...\n\n");
 
 		//Describe the room
-		PRINT(m_currentRoom->Describe());
+		Print(m_currentRoom->Describe());
 
 		//See what action the user would like to take
-		PRINT("\nYou can:\n Move North, East, South or West\n");
-		INPUT(input);
+		Print("\nYou can:\n Move North, East, South or West\n");
+
+		string inputString;
+		Input(&inputString);
 
 		//Temporary input movement interpretation
 		int xDirection = 0;
 		int yDirection = 0;
 
-		if (input == "move north")
+		if (inputString == "move north")
 		{
 			yDirection = 1;
 		}
-		else if (input == "move east")
+		else if (inputString == "move east")
 		{
 			xDirection = 1;
 		}
-		else if (input == "move south")
+		else if (inputString == "move south")
 		{
 			yDirection = -1;
 		}
-		else if (input == "move west")
+		else if (inputString == "move west")
 		{
 			xDirection = -1;
 		}
-		else //No valid input, ask again
+		else //No valid input
 		{
 			break;
 		}
@@ -160,7 +154,7 @@ void TextAdventureApplication::EnterRoom(int xPosition, int yPosition)
 void TextAdventureApplication::PrintMinimap() //Make this use VT100 so it is better
 {
 	//Title
-	PRINT("MINIMAP:\n");
+	Print("Minimap:\n");
 
 	//Go through all rooms, the y loop if inverted, so room 0, 0 appears in the bottom left corner, to align with the compass directions
 	for (int y = m_mapHeight - 1; y >= 0 ; y--) 
@@ -170,11 +164,11 @@ void TextAdventureApplication::PrintMinimap() //Make this use VT100 so it is bet
 			//See if this is the player's position
 			if (x == m_player->xPosition && y == m_player->yPosition)
 			{
-				PRINT("[P]");
+				Print("[P]");
 			}
 			else
 			{
-				PRINT("[ ]");
+				Print("[ ]");
 			}
 		}
 		
@@ -182,20 +176,20 @@ void TextAdventureApplication::PrintMinimap() //Make this use VT100 so it is bet
 		int compassRow = m_mapHeight - y;
 		if (compassRow == 1)
 		{
-			PRINT("\t  N");
+			Print("\t  N");
 		}
 		else if (compassRow == 2)
 		{
-			PRINT("\tW + E");
+			Print("\tW + E");
 		}
 		else if (compassRow == 3)
 		{
-			PRINT("\t  S");
+			Print("\t  S");
 		}
 
 		//Next row
-		PRINT("\n");
+		Print("\n");
 	}
 
-	PRINT("\n");
+	Print("\n");
 }
