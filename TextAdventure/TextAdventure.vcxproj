@@ -129,7 +129,6 @@
   <ItemGroup>
     <ClCompile Include="ConsoleTools.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Minimap.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="TextAdventureApplication.cpp" />
@@ -137,7 +136,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleTools.h" />
-    <ClInclude Include="Minimap.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="TextAdventureApplication.h" />

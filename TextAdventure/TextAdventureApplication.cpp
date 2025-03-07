@@ -45,18 +45,16 @@ TextAdventureApplication::TextAdventureApplication(const int mapWidth, const int
 			);
 		}
 	}
-
-	//Null pointerise the curent room
-	m_currentRoom = nullptr;
 	
 	//Create the player
 	m_player = new Player(0, 0, m_mapWidth, m_mapHeight);
+
+	//Null pointerise the curent room
+	m_player->m_currentRoom = nullptr;
 }
 
 TextAdventureApplication::~TextAdventureApplication()
 {
-
-
 	//Deallocate the player
 	delete m_player;
 }
@@ -69,6 +67,9 @@ TextAdventureApplication::~TextAdventureApplication()
 //This introduces the player, and contains the game loop
 int TextAdventureApplication::Run()
 {
+	//Enable VT100
+	EnableVirutalTerminalSequences();
+
 	//Starting message
 	Print("Welcome to the text adventure...\n\n An open door to a room is in front of you. Press [enter] to start your adventure.");
 
@@ -83,13 +84,13 @@ int TextAdventureApplication::Run()
 		//Clear the output
 		Clear();
 
-		//Print the minimap
-		PrintMinimap();
+		//Print the map
+		PrintMap();
 
 		Print("You are in a room...\n\n");
 
 		//Describe the room
-		Print(m_currentRoom->Describe());
+		Print(m_player->m_currentRoom->Describe());
 
 		//See what action the user would like to take
 		Print("\nYou can:\n Move North, East, South or West\n");
@@ -143,53 +144,42 @@ int TextAdventureApplication::Run()
 void TextAdventureApplication::EnterRoom(int xPosition, int yPosition)
 {
 	//Set the current room
-	m_currentRoom = &m_rooms[yPosition][xPosition];
+	m_player->m_currentRoom = &m_rooms[yPosition][xPosition];
 
 	//Move the player
 	m_player->xPosition = xPosition;
 	m_player->yPosition = yPosition;
 }
 
-//Prints out a minimap showing the grid of rooms, and where the player is
-void TextAdventureApplication::PrintMinimap() //Make this use VT100 so it is better
+
+//Prints out a map, showing where the player is, and where the rooms are
+void TextAdventureApplication::PrintMap()
 {
 	//Title
-	Print("Minimap:\n");
-
-	//Go through all rooms, the y loop if inverted, so room 0, 0 appears in the bottom left corner, to align with the compass directions
-	for (int y = m_mapHeight - 1; y >= 0 ; y--) 
+	Print("Map:\n");
+	
+	//Go through all rooms, and print them
+	for (int y = m_mapHeight - 1; y >= 0; y--) //The Y axis loop is inverted so row 0 appears at the bottom
 	{
 		for (int x = 0; x < m_mapWidth; x++)
 		{
-			//See if this is the player's position
+			//See if this is the player's position or a room
 			if (x == m_player->xPosition && y == m_player->yPosition)
 			{
-				Print("[P]");
+				Print(COLOUR_TEXT([P], 32));
 			}
 			else
 			{
 				Print("[ ]");
 			}
 		}
-		
-		//Compass row
-		int compassRow = m_mapHeight - y;
-		if (compassRow == 1)
-		{
-			Print("\t  N");
-		}
-		else if (compassRow == 2)
-		{
-			Print("\tW + E");
-		}
-		else if (compassRow == 3)
-		{
-			Print("\t  S");
-		}
 
 		//Next row
 		Print("\n");
 	}
+
+	//Print the compass
+	PrintAtPosition(COLOUR_TEXT(\t   N\n\tW + E\n\t   S, 31), m_mapWidth, 0);
 
 	Print("\n");
 }

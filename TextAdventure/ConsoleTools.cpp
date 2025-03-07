@@ -4,7 +4,8 @@
 #include <iostream>
 #include <cstdlib>
 
-#define ESC "\x1b["
+//Escape character
+#define ESC "\x1B"
 
 
 using std::cin;
@@ -50,17 +51,17 @@ void Print(string message)
 void PrintAtPosition(string message, int xPosition, int yPosition)
 {
 	//Save the current cursor position, so it can be returned to 
-	cout << ESC << "s";
+	cout << ESC << " s";
 
 	//Position the cursor at the given position and print the string message
 	cout
 		<<
-		ESC << xPosition << ";" << yPosition << "H" //Position the cursor
+		ESC << "[" << xPosition << ";" << yPosition << "H" //Position the cursor
 		<<
 		message; //Print the string
 
 	//Return the cursor to the original position before it was moved
-	cout << ESC << "u"; 
+	cout << ESC << " u"; 
 }
 
 void Input(string* inputString)
