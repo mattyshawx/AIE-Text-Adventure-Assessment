@@ -187,6 +187,28 @@ int TextAdventureApplication::Run()
 			roomItem->Use();
 			PrintAndWaitForEnter("");
 		}
+		else if (inputString == "spell") //Use a spell
+		{
+			//Print out the spells that the player knows
+			Print("You know the spells: ");
+			m_player->PrintSpells();
+			
+			//Input the spell to use
+			Print("\nThink of a spell to cast from these:");
+
+			string desiredSpell;
+			Input(&desiredSpell);
+
+			//Check to see if the player has this spell
+			if (m_player->FindSpell(desiredSpell))
+			{
+				PrintAndWaitForEnter("You perform " + desiredSpell + ". Nothing happens.\nDo you not believe in magic?");
+			}
+			else //The player does not have this spell
+			{
+				PrintAndWaitForEnter("You do not know " + desiredSpell + ".");
+			}
+		}
 		else if (inputString == "quit game") //Quit game
 		{
 			PrintAndWaitForEnter("You rage quit and escape the matrix. I will get you for this!");

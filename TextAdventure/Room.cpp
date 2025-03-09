@@ -18,7 +18,7 @@ const string ROOM_DESCRIPTIONS[ROOM_DESCRIPTION_COUNT] = {
 	"Mice scurry away through a hole in the wall. You can feel the dust in your nose...",
 	"The walls are bleached yellow, a mysterious buzz fills the air...",
 	"The room is hot, it smells like dead mice.",
-	"It smells of old urine and mould.",
+	"It smells of old wood and mould.",
 	"Exposed asbestos insulation sticks out, your lungs feel spiky.",
 	"The walls are beige, the floor has a beige rug, it appeals to you.",
 	"The wallpaper is torn, the floorboards are covered in dust.",
@@ -120,7 +120,7 @@ Item* PickRandomItem()
 
 		case 1: //Lamp
 		{
-			//return new Lamp();
+			return new Lamp();
 		}
 
 		case 2: //Donut box
