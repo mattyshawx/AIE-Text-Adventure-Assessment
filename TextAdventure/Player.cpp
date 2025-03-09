@@ -82,3 +82,41 @@ void Player::PrintSpells()
 		}
 	}
 }
+
+//Using a binary search, checks and returns whether or not the player knows a given spell
+bool Player::FindSpell(string spellName)
+{
+	//Start out with the whole array as the bounds
+	int lowerBound = 0;
+	int upperBound = m_spells.size() - 1;
+
+	//Try and find the spell
+	while (lowerBound <= upperBound)
+	{
+		//Grab the mid point of the bounds
+		int midPoint = (lowerBound + upperBound) / 2;
+
+		//Get the spell at this index, and convert it to lowercase
+		string currentSpell = m_spells[midPoint];
+		ToLowercase(&currentSpell);
+
+		//See if the right spell has been found
+		if (currentSpell == spellName)
+		{
+			return true;
+		}
+
+		//See which half of the bounds the spell might be in
+		if (currentSpell < spellName) //Upper half
+		{
+			lowerBound = midPoint + 1;
+		}
+		else if (currentSpell > spellName) //Lower half
+		{
+			upperBound = midPoint - 1;
+		}
+	}
+
+	//The spell wasn't found
+	return false;
+}

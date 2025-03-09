@@ -198,6 +198,16 @@ int TextAdventureApplication::Run()
 
 			string desiredSpell;
 			Input(&desiredSpell);
+
+			//Check to see if the player has this spell
+			if (m_player->FindSpell(desiredSpell))
+			{
+				PrintAndWaitForEnter("You perform " + desiredSpell + ". Nothing happens.\nDo you not believe in magic?");
+			}
+			else //The player does not have this spell
+			{
+				PrintAndWaitForEnter("You do not know " + desiredSpell + ".");
+			}
 		}
 		else if (inputString == "quit game") //Quit game
 		{

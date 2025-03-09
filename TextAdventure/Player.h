@@ -27,6 +27,8 @@ public:
 
 	void PrintSpells();
 
+	bool FindSpell(string spellName);
+
 	//Public variables
 public:
 
