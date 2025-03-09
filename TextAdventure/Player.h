@@ -27,7 +27,7 @@ public:
 	int xPosition;
 	int yPosition;
 
-	Room* m_currentRoom;
+	Room* currentRoom;
 
 	//Private variables
 private:

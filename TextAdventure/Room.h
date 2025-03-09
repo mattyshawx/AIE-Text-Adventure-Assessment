@@ -13,7 +13,10 @@ public:
 	Room(string description);
 	~Room();
 
-	
+	//Public variables
+public:
+
+	bool visited;
 
 };
 

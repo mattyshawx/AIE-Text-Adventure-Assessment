@@ -48,9 +48,6 @@ TextAdventureApplication::TextAdventureApplication(const int mapWidth, const int
 	
 	//Create the player
 	m_player = new Player(0, 0, m_mapWidth, m_mapHeight);
-
-	//Null pointerise the curent room
-	m_player->m_currentRoom = nullptr;
 }
 
 TextAdventureApplication::~TextAdventureApplication()
@@ -67,9 +64,6 @@ TextAdventureApplication::~TextAdventureApplication()
 //This introduces the player, and contains the game loop
 int TextAdventureApplication::Run()
 {
-	//Enable VT100
-	EnableVirutalTerminalSequences();
-
 	//Starting message
 	Print("Welcome to the text adventure...\n\n An open door to a room is in front of you. Press [enter] to start your adventure.");
 
@@ -90,43 +84,61 @@ int TextAdventureApplication::Run()
 		Print("You are in a room...\n\n");
 
 		//Describe the room
-		Print(m_player->m_currentRoom->Describe());
+		Print(m_player->currentRoom->Describe());
 
 		//See what action the user would like to take
-		Print("\nYou can:\n Move North, East, South or West\n");
+		//Print("\nYou can:\n Move North, East, South or West\n");
+		Print("\nThink of what to do (move [direction], use [object], spell, quit game)");
 
 		string inputString;
 		Input(&inputString);
 
-		//Temporary input movement interpretation
-		int xDirection = 0;
-		int yDirection = 0;
+		//Try to handle the input
+		if (inputString.substr(0, 4) == "move") //Move input
+		{
+			//Extract the direction to move in
+			string direction = inputString.substr(5);
 
-		if (inputString == "move north")
-		{
-			yDirection = 1;
-		}
-		else if (inputString == "move east")
-		{
-			xDirection = 1;
-		}
-		else if (inputString == "move south")
-		{
-			yDirection = -1;
-		}
-		else if (inputString == "move west")
-		{
-			xDirection = -1;
-		}
-		else //No valid input
-		{
-			break;
-		}
+			//Interpret the direction to move in
+			int xDirection = 0;
+			int yDirection = 0;
 
-		//Try and move
-		if (not m_player->Move(xDirection, yDirection))
+			if (direction == "north") //North
+			{
+				yDirection = 1;
+			}
+			else if (direction == "east") //East
+			{
+				xDirection = 1;
+			}
+			else if (direction == "south") //South
+			{
+				yDirection = -1;
+			}
+			else if (direction == "west") //West
+			{
+				xDirection = -1;
+			}
+			else //Something invalid
+			{
+				PrintAndWaitForEnter("\nYou try to walk \"" + direction + "\". You confuse yourself.");
+			}
+
+			//Try and move
+			if (not m_player->Move(xDirection, yDirection))
+			{
+				PrintAndWaitForEnter("\nYou walk " + direction + " into a wall. Your head aches");
+			}
+		}
+		else if (inputString == "quit game") //Exit the game
 		{
-			continue;
+			PrintAndWaitForEnter("\nYou rage quit and escape the matrix. I will get you for this!");
+
+			break; //Get out of the game loop
+		}
+		else //Invalid input
+		{
+			PrintAndWaitForEnter("\nYour brain switches off, you try to \"" + inputString + "\". Nothing happens.");
 		}
 
 		EnterRoom(m_player->xPosition, m_player->yPosition);
@@ -144,13 +156,15 @@ int TextAdventureApplication::Run()
 void TextAdventureApplication::EnterRoom(int xPosition, int yPosition)
 {
 	//Set the current room
-	m_player->m_currentRoom = &m_rooms[yPosition][xPosition];
+	m_player->currentRoom = &m_rooms[yPosition][xPosition];
+
+	//Mark the room as visited
+	m_player->currentRoom->visited = true;
 
 	//Move the player
 	m_player->xPosition = xPosition;
 	m_player->yPosition = yPosition;
 }
-
 
 //Prints out a map, showing where the player is, and where the rooms are
 void TextAdventureApplication::PrintMap()
@@ -163,23 +177,41 @@ void TextAdventureApplication::PrintMap()
 	{
 		for (int x = 0; x < m_mapWidth; x++)
 		{
-			//See if this is the player's position or a room
-			if (x == m_player->xPosition && y == m_player->yPosition)
+			//Determine what to print in this grid space
+			if (x == m_player->xPosition && y == m_player->yPosition) //The room the player is in
 			{
-				Print(COLOUR_TEXT([P], 32));
+				Print("[P]");
 			}
-			else
+			else if (m_rooms[y][x].visited)
 			{
 				Print("[ ]");
 			}
+			else //An undiscovered room
+			{
+				Print(" ? ");
+			}
+		}
+
+
+		//Compass row (this is a pretty bad way of doing it, virtual terminal processing would be better)
+		int compassRow = m_mapHeight - y;
+
+		if (compassRow == 1) //Top row
+		{
+			Print("\t  N");
+		}
+		else if (compassRow == 2) //Middle row
+		{
+			Print("\tW + E");
+		}
+		else if (compassRow == 3) //Bottom row
+		{
+			Print("\t  S");
 		}
 
 		//Next row
 		Print("\n");
 	}
-
-	//Print the compass
-	PrintAtPosition(COLOUR_TEXT(\t   N\n\tW + E\n\t   S, 31), m_mapWidth, 0);
 
 	Print("\n");
 }

@@ -14,6 +14,9 @@ Player::Player(int initialXPosition, int initialYPosition, int mapWidth, int map
 	//Set the X and Y positions
 	xPosition = initialXPosition;
 	yPosition = initialYPosition;
+
+	//Initialise the current room to a null pointer
+	currentRoom = nullptr;
 }
 
 Player::~Player()

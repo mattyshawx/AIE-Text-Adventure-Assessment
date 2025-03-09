@@ -16,7 +16,7 @@ int main()
     #endif
 
     //Initialise the text aventure application
-    TextAdventureApplication* application = new TextAdventureApplication(5, 3);
+    TextAdventureApplication* application = new TextAdventureApplication(10, 8  );
 
     //Run the application
     int runResult = application->Run();
