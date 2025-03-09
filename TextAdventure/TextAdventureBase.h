@@ -9,16 +9,15 @@ using std::string;
 class TextAdventureBase
 {
 
-	//Constructors and destructor
+	//Constructors
 public:
 	
 	TextAdventureBase();
 	TextAdventureBase(string description);
-	~TextAdventureBase();
 
 	//Public functions
 public:
-	virtual string Describe();
+	virtual void Describe();
 
 	//Protected variables
 protected:

@@ -40,8 +40,9 @@ TextAdventureApplication::TextAdventureApplication(const int mapWidth, const int
 			m_rooms[y].emplace_back();
 
 			//Create a new room to put in the array
-			m_rooms[y][x] = Room(
-				GenerateRoomDescription()
+			m_rooms[y][x] = new Room(
+				GenerateRoomDescription(),
+				PickRandomItem()
 			);
 		}
 	}
@@ -52,6 +53,14 @@ TextAdventureApplication::TextAdventureApplication(const int mapWidth, const int
 
 TextAdventureApplication::~TextAdventureApplication()
 {
+	for (int y = 0; y < m_mapHeight; y++)
+	{
+		for (int x = 0; x < m_mapWidth; x++)
+		{
+			delete m_rooms[y][x];
+		}
+	}
+
 	//Deallocate the player
 	delete m_player;
 }
@@ -84,17 +93,19 @@ int TextAdventureApplication::Run()
 		Print("You are in a room...\n\n");
 
 		//Describe the room
-		Print(m_player->currentRoom->Describe());
+		m_player->currentRoom->Describe();
 
 		//See what action the user would like to take
-		//Print("\nYou can:\n Move North, East, South or West\n");
-		Print("\nThink of what to do (move [direction], use [object], spell, quit game)");
+		PrintDivider();
+		Print("Think of what to do (move [direction], use [object], spell, quit game)");
 
 		string inputString;
 		Input(&inputString);
 
+		Print("\n");
+
 		//Try to handle the input
-		if (inputString.substr(0, 4) == "move") //Move input
+		if (inputString.substr(0, 5) == "move ") //Move
 		{
 			//Extract the direction to move in
 			string direction = inputString.substr(5);
@@ -102,7 +113,7 @@ int TextAdventureApplication::Run()
 			//Interpret the direction to move in
 			int xDirection = 0;
 			int yDirection = 0;
-
+			
 			if (direction == "north") //North
 			{
 				yDirection = 1;
@@ -119,29 +130,73 @@ int TextAdventureApplication::Run()
 			{
 				xDirection = -1;
 			}
+			else if (direction == "") //Nowhere
+			{
+				PrintAndWaitForEnter("You just stand there...");
+				continue;
+			}
 			else //Something invalid
 			{
-				PrintAndWaitForEnter("\nYou try to walk \"" + direction + "\". You confuse yourself.");
+				PrintAndWaitForEnter("You try to walk \"" + direction + "\". You confuse yourself.");
+				continue;
 			}
 
 			//Try and move
-			if (not m_player->Move(xDirection, yDirection))
+			if (m_player->Move(xDirection, yDirection)) //Valid move
 			{
-				PrintAndWaitForEnter("\nYou walk " + direction + " into a wall. Your head aches");
+				//Set the new room
+				EnterRoom(m_player->xPosition, m_player->yPosition);
 			}
+			else //Move out of bounds
+			{
+				PrintAndWaitForEnter("You walk " + direction + " into a wall. Your head aches");
+			}
+			
 		}
-		else if (inputString == "quit game") //Exit the game
+		else if (inputString.substr(0, 4) == "use ") //Use item
 		{
-			PrintAndWaitForEnter("\nYou rage quit and escape the matrix. I will get you for this!");
+			//Interpret the item to use from the input
+			string itemToUse = inputString.substr(4);
+
+			Item* roomItem = (m_player->currentRoom->item);
+
+			//See if an item was inputted at all
+			if (itemToUse == "")
+			{
+				PrintAndWaitForEnter("You do nothing...");
+				continue;
+			}
+
+			//Make sure there even is an item in the room
+			if (roomItem == nullptr)
+			{
+				PrintAndWaitForEnter("The room is empty, but you think see something... You are hallucinating.");
+				continue;
+			}
+
+			//Make sure that a present item was entered
+			string roomItemName = roomItem->name;
+
+			if (roomItemName != itemToUse)
+			{
+				PrintAndWaitForEnter("There's a " + roomItemName + " in front of you, but it looks like a " + itemToUse + " to you.\nAre you drunk?");
+				continue;
+			}
+
+			//Use the item
+			roomItem->Use();
+			PrintAndWaitForEnter("");
+		}
+		else if (inputString == "quit game") //Quit game
+		{
+			PrintAndWaitForEnter("You rage quit and escape the matrix. I will get you for this!");
 
 			break; //Get out of the game loop
 		}
 		else //Invalid input
 		{
-			PrintAndWaitForEnter("\nYour brain switches off, you try to \"" + inputString + "\". Nothing happens.");
+			PrintAndWaitForEnter("Your brain switches off, you try to \"" + inputString + "\". Nothing happens.");
 		}
-
-		EnterRoom(m_player->xPosition, m_player->yPosition);
 	}
 
 	return EXIT_SUCCESS;
@@ -156,7 +211,7 @@ int TextAdventureApplication::Run()
 void TextAdventureApplication::EnterRoom(int xPosition, int yPosition)
 {
 	//Set the current room
-	m_player->currentRoom = &m_rooms[yPosition][xPosition];
+	m_player->currentRoom = m_rooms[yPosition][xPosition];
 
 	//Mark the room as visited
 	m_player->currentRoom->visited = true;
@@ -182,36 +237,51 @@ void TextAdventureApplication::PrintMap()
 			{
 				Print("[P]");
 			}
-			else if (m_rooms[y][x].visited)
+			/*else if (!m_rooms[y][x]->visited) //An undiscovered room
+			{
+				Print(" ? ");
+			}*/
+			else if (m_rooms[y][x]->item != nullptr) // room has an item in it
+			{
+				Print("[i]");
+			}
+			else //if (m_rooms[y][x]->visited) //The room has been visited before
 			{
 				Print("[ ]");
 			}
-			else //An undiscovered room
-			{
-				Print(" ? ");
-			}
 		}
 
 
-		//Compass row (this is a pretty bad way of doing it, virtual terminal processing would be better)
-		int compassRow = m_mapHeight - y;
+		//Text next to the minimap (this is a pretty bad way of doing it, virtual terminal processing would be better)
+		int sideRow = m_mapHeight - y;
 
-		if (compassRow == 1) //Top row
+		if (sideRow == 1) //Top of compass
 		{
 			Print("\t  N");
 		}
-		else if (compassRow == 2) //Middle row
+		else if (sideRow == 2) //Middle of compass
 		{
 			Print("\tW + E");
 		}
-		else if (compassRow == 3) //Bottom row
+		else if (sideRow == 3) //Bottom of compass
 		{
 			Print("\t  S");
 		}
+		else if (sideRow == 5) //Player key
+		{
+			Print("\tP = player");
+		}
+		else if (sideRow == 6) //Item key
+		{
+			Print("\ti = item");
+		}
 
 		//Next row
-		Print("\n");
+		if (y > 0)
+		{
+			Print("\n");
+		}
 	}
 
-	Print("\n");
+	PrintDivider();
 }

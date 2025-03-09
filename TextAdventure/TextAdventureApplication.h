@@ -4,6 +4,7 @@
 
 #include "Player.h"
 #include "Room.h"
+#include "Item.h"
 
 
 using std::vector;
@@ -36,7 +37,7 @@ private:
 	//Game objects
 	Player* m_player;
 	
-	vector<vector<Room>> m_rooms;
+	vector<vector<Room*>> m_rooms;
 
 	//Map size
 	int m_mapWidth;

@@ -1,8 +1,10 @@
 #include "TextAdventureBase.h"
 
+#include "ConsoleTools.h"
+
 
 //------------------------------------------------------------------------
-//					Constructor and destructor
+//					Constructors
 //------------------------------------------------------------------------
 
 //Default constructor, no description given
@@ -19,17 +21,12 @@ TextAdventureBase::TextAdventureBase(string description)
 	m_description = description;
 }
 
-TextAdventureBase::~TextAdventureBase()
-{
-
-}
-
 //------------------------------------------------------------------------
 //					Public functions
 //------------------------------------------------------------------------
 
 //This just returns the description
-string TextAdventureBase::Describe()
+void TextAdventureBase::Describe()
 {
-	return m_description + "\n";
+	Print(m_description + "\n");
 }

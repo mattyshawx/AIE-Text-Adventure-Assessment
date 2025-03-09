@@ -40,6 +40,11 @@ void PrintAndWaitForEnter(string message)
 	WaitForEnter();
 }
 
+void PrintDivider()
+{
+	Print("\n------------------------------------------\n");
+}
+
 void Input(string* inputString)
 {
 	//Print the little icon to show the user that they are to input something
@@ -49,7 +54,7 @@ void Input(string* inputString)
 	getline(cin, *inputString);
 
 	//Convert the input to lowercase
-	std::transform(inputString->begin(), inputString->end(), inputString->begin(), std::tolower);
+	ToLowercase(inputString);
 }
 
 //Waits for the user to press enter
@@ -58,5 +63,27 @@ void WaitForEnter()
 	//Call the Input() function and give it a temporary string
 	string temporaryString;
 	Input(&temporaryString);
+}
+
+
+//------------------------------------------------------------------------
+//					Other
+//------------------------------------------------------------------------
+
+//Generates a random number between 0 and maxNumber
+int Random(int maxNumber)
+{
+	//Set the random seed
+	srand(rand() + time(nullptr));
+
+	//Pick and return a random number
+	return rand() % (maxNumber + 1);
+}
+
+//Converts a string to lowercase
+void ToLowercase(string* givenString)
+{
+	//Convert it to lowercase using the standard transform and tolower functions
+	std::transform(givenString->begin(), givenString->end(), givenString->begin(), std::tolower);
 }
 

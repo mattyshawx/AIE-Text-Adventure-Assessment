@@ -3,6 +3,11 @@
 #include <ctime>
 #include <cstdlib>
 
+#include "ConsoleTools.h"
+#include "Item.h"
+#include "Cat.h"
+
+#include <iostream>
 
 const int ROOM_DESCRIPTION_COUNT = 15;
 const string ROOM_DESCRIPTIONS[ROOM_DESCRIPTION_COUNT] = {
@@ -20,7 +25,7 @@ const string ROOM_DESCRIPTIONS[ROOM_DESCRIPTION_COUNT] = {
 	"The floorboards creek, there are several holes in the roof.",
 	"Cream walls surround you, the lights are dim.",
 	"The door creeks shut behind you. Dust fills your lungs,",
-	"The rooms smells musty. The carpet is permanently stained by old water.",
+	"The rooms smells musty. The carpet is permanently stained by old water."
 };
 
 
@@ -33,22 +38,49 @@ Room::Room()
 {
 	//Mark as not visited
 	visited = false;
+
+	//Set the item to nullptr
+	item = nullptr;
 }
 
-//Makes a room from a given description
-Room::Room(string description)
+//Makes a room from a given description and an item (which may be a null pointer)
+Room::Room(string description, Item* givenItem)
 {
 	//Set the description
 	m_description = description;
 
 	//Mark the room as not visited
 	visited = false;
+
+	//Set the item
+	item = givenItem;
 }
 
 //Destructor
 Room::~Room()
 {
+	//Deallocate the item pointer, if there is one
+	if (item != nullptr)
+	{
+		delete item;
+	}
+}
 
+void Room::Describe()
+{
+	//If there is an item in the room, describe it
+	if (item != nullptr)
+	{
+		//Room description
+		Print(m_description + "\n\nThere is something there...\n\n");
+
+		//item description
+		item->Describe();
+	}
+	else //No item
+	{
+		Print(m_description + "\n\nThere is nothing else.");
+	}
 }
 
 
@@ -59,11 +91,39 @@ Room::~Room()
 //This function generates a room description, as a string
 string GenerateRoomDescription()
 {
-	//Set the random seed
-	srand(rand() + time(nullptr));
-
 	//Pick a random description
-	int index = rand() % (ROOM_DESCRIPTION_COUNT - 1);
+	int index = Random(ROOM_DESCRIPTION_COUNT - 1);
 
 	return ROOM_DESCRIPTIONS[index];
+}
+
+//This picks a random item, and returns a pointer to it, or nullptr if no item. There is a 1 in 3 chance of actually getting an item
+Item* PickRandomItem()
+{
+	//Have a chance to not have an item
+	if (Random(7) < 4)
+	{
+		return nullptr;
+	}
+
+	//Pick a random item
+	int itemNumber = Random(1);
+
+	switch (itemNumber)
+	{
+		case 0: //Cat
+		{
+			return new Cat();
+		}
+
+		case 1:
+		{
+			return new Cat();
+		}
+
+		default: //Default
+		{
+			return nullptr;
+		}
+	}
 }

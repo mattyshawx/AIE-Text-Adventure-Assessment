@@ -3,6 +3,9 @@
 #include "TextAdventureBase.h"
 
 
+class Item;
+
+
 //Room class
 class Room : public TextAdventureBase
 {
@@ -10,7 +13,7 @@ class Room : public TextAdventureBase
 public:
 
 	Room();
-	Room(string description);
+	Room(string description, Item* givenItem);
 	~Room();
 
 	//Public variables
@@ -18,7 +21,17 @@ public:
 
 	bool visited;
 
+	Item* item;
+
+	//Overriden public functions
+public:
+
+	void Describe() override;
+
 };
 
-//A function to generate a room description
+//Class related functions
+
 string GenerateRoomDescription();
+
+Item* PickRandomItem();
