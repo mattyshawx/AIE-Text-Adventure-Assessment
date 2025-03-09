@@ -1,5 +1,12 @@
 #pragma once
 
+#include <vector>
+#include <string>
+
+
+using std::string;
+using std::vector;
+
 
 class Room;
 
@@ -18,6 +25,8 @@ public:
 
 	bool Move(int xDirection, int yDirection);
 
+	void PrintSpells();
+
 	//Public variables
 public:
 
@@ -29,6 +38,9 @@ public:
 
 	//Private variables
 private:
+
+	//Inventory
+	vector<string> m_spells;
 
 	//Bounds
 	int m_mapWidth;
