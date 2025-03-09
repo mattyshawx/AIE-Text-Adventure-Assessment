@@ -9,6 +9,8 @@ using std::string;
 
 //Console manipulation
 void Clear();
+void SetConsoleColour(string backgroundCode, string textCode);
+void ResetConsoleColour();
 
 //Input and output
 void Print(string message);

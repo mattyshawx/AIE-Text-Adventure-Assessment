@@ -1,13 +1,13 @@
 #pragma once
 
-#include "TextAdventureBase.h"
+#include "ObjectBase.h"
 
 
 class Item;
 
 
 //Room class
-class Room : public TextAdventureBase
+class Room : public ObjectBase
 {
 	//Constructor and destructor
 public:

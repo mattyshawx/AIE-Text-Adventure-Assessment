@@ -1,12 +1,10 @@
 #pragma once
 
-#include "TextAdventureBase.h"
-
 
 class Room;
 
 
-class Player : TextAdventureBase
+class Player
 {
 
 	//Constructor and destructor

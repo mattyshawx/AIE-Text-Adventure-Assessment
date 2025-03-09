@@ -6,14 +6,14 @@
 using std::string;
 
 
-class TextAdventureBase
+class ObjectBase
 {
 
 	//Constructors
 public:
 	
-	TextAdventureBase();
-	TextAdventureBase(string description);
+	ObjectBase();
+	ObjectBase(string description);
 
 	//Public functions
 public:

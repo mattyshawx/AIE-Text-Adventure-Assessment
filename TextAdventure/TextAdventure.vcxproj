@@ -127,23 +127,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BoxOfDonuts.cpp" />
     <ClCompile Include="Cat.cpp" />
     <ClCompile Include="ConsoleTools.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ItemTemplate.cpp" />
+    <ClCompile Include="Lamp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="TextAdventureApplication.cpp" />
-    <ClCompile Include="TextAdventureBase.cpp" />
+    <ClCompile Include="ObjectBase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BoxOfDonuts.h" />
     <ClInclude Include="Cat.h" />
     <ClInclude Include="ConsoleTools.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemTemplate.h" />
+    <ClInclude Include="Lamp.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="TextAdventureApplication.h" />
-    <ClInclude Include="TextAdventureBase.h" />
+    <ClInclude Include="ObjectBase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

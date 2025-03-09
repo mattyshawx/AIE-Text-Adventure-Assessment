@@ -10,13 +10,87 @@
 //Creates a cat
 Cat::Cat()
 {
-	//Set the description and name
+	//Set the name
 	name = "cat";
-	m_description = "A brown and white cat.";
+
+	//Chose a cat type
+	int typeNumber = Random(9);
+	string catType;
+	switch (typeNumber)
+	{
+		case 0:
+		{
+			catType = "brown";
+			break;
+		}
+
+		case 1:
+		{
+			catType = "white";
+			break;
+		}
+
+		case 2:
+		{
+			catType = "black";
+			break;
+		}
+
+		case 3:
+		{
+			catType = "light orange";
+			break;
+		}
+
+		case 4:
+		{
+			catType = "grey";
+			break;
+		}
+
+		case 5:
+		{
+			catType = "spotty";
+			break;
+		}
+
+		case 6:
+		{
+			catType = "brown";
+			break;
+		}
+
+		case 7:
+		{
+			catType = "fat";
+			break;
+		}
+
+		case 8:
+		{
+			catType = "humongous";
+			break;
+		}
+
+		case 9:
+		{
+			catType = "mysterious";
+			break;
+		}
+
+		default:
+		{
+			m_description = "invalid";
+
+			break;
+		}
+	}
+	m_description = "A " + catType + " cat.";
 
 	//Mark purring as false
 	m_purring = false;
 }
+
 
 //------------------------------------------------------------------------
 //					Overridden public functions
@@ -25,14 +99,17 @@ Cat::Cat()
 //Describes the cat, including if it is purring or not
 void Cat::Describe()
 {
+	//Print the description
+	Print(m_description);
+
 	//If the cat is purring, mention that
 	if (m_purring)
 	{
-		Print(m_description + "\nIt is purring.");
+		Print("\nIt is purring.");
 	}
 	else
 	{
-		Print(m_description + "\nIt looks unhappy, in need of pat");
+		Print("\nIt looks unhappy, in need of pat");
 	}
 }
 
@@ -40,7 +117,7 @@ void Cat::Describe()
 void Cat::Use()
 {
 	//Prompt the user
-	Print("You pat the cat\n");
+	Print("You pat the cat.\n");
 
 	//Make it purr
 	m_purring = true;
@@ -73,7 +150,7 @@ void Cat::Use()
 
 		case 3:
 		{
-			Print("*mew*\nIt wants more pats");
+			Print("*mew*\nIt wants more pats.");
 
 			break;
 		}

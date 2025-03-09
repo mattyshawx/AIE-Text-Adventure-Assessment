@@ -21,6 +21,21 @@ void Clear()
 	system("cls");
 }
 
+//Sets the background and text colours of the console
+void SetConsoleColour(string backgroundCode, string textCode)
+{
+	//Concatenate the given colour codes
+	string colourString = "color " + backgroundCode + textCode;
+	
+	system(colourString.c_str());
+}
+
+//Sets the console background and text back to the normal black and white
+void ResetConsoleColour()
+{
+	SetConsoleColour("0", "7");
+}
+
 
 //------------------------------------------------------------------------
 //					Input and output

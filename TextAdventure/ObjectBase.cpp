@@ -1,4 +1,4 @@
-#include "TextAdventureBase.h"
+#include "ObjectBase.h"
 
 #include "ConsoleTools.h"
 
@@ -8,14 +8,14 @@
 //------------------------------------------------------------------------
 
 //Default constructor, no description given
-TextAdventureBase::TextAdventureBase()
+ObjectBase::ObjectBase()
 {
 	//Give it a default description
 	m_description = "A mysterious, undescribed object";
 }
 
 //Constructor that takes in a description
-TextAdventureBase::TextAdventureBase(string description)
+ObjectBase::ObjectBase(string description)
 {
 	//Set the description
 	m_description = description;
@@ -26,7 +26,7 @@ TextAdventureBase::TextAdventureBase(string description)
 //------------------------------------------------------------------------
 
 //This just returns the description
-void TextAdventureBase::Describe()
+void ObjectBase::Describe()
 {
 	Print(m_description + "\n");
 }

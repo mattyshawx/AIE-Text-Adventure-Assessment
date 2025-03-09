@@ -219,6 +219,9 @@ void TextAdventureApplication::EnterRoom(int xPosition, int yPosition)
 	//Move the player
 	m_player->xPosition = xPosition;
 	m_player->yPosition = yPosition;
+
+	//Reset the window colour
+	ResetConsoleColour();
 }
 
 //Prints out a map, showing where the player is, and where the rooms are
@@ -237,15 +240,15 @@ void TextAdventureApplication::PrintMap()
 			{
 				Print("[P]");
 			}
-			/*else if (!m_rooms[y][x]->visited) //An undiscovered room
+			else if (!m_rooms[y][x]->visited) //An undiscovered room
 			{
 				Print(" ? ");
-			}*/
+			}
 			else if (m_rooms[y][x]->item != nullptr) // room has an item in it
 			{
 				Print("[i]");
 			}
-			else //if (m_rooms[y][x]->visited) //The room has been visited before
+			else if (m_rooms[y][x]->visited) //The room has been visited before
 			{
 				Print("[ ]");
 			}

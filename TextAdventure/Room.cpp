@@ -6,6 +6,8 @@
 #include "ConsoleTools.h"
 #include "Item.h"
 #include "Cat.h"
+#include "Lamp.h"
+#include "BoxOfDonuts.h"
 
 #include <iostream>
 
@@ -107,7 +109,7 @@ Item* PickRandomItem()
 	}
 
 	//Pick a random item
-	int itemNumber = Random(1);
+	int itemNumber = Random(2);
 
 	switch (itemNumber)
 	{
@@ -116,9 +118,14 @@ Item* PickRandomItem()
 			return new Cat();
 		}
 
-		case 1:
+		case 1: //Lamp
 		{
-			return new Cat();
+			//return new Lamp();
+		}
+
+		case 2: //Donut box
+		{
+			return new BoxOfDonuts();
 		}
 
 		default: //Default

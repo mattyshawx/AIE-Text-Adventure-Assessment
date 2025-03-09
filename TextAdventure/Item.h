@@ -1,9 +1,9 @@
 #pragma once
 
-#include "TextAdventureBase.h"
+#include "ObjectBase.h"
 
 
-class Item : public TextAdventureBase
+class Item : public ObjectBase
 {
 
 	//Constructor
